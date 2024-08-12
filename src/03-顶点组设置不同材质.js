@@ -1,3 +1,4 @@
+// 03-顶点组设置不同材质
 // 导入threejs
 import * as THREE from 'three';
 // 导入轨道控制器
