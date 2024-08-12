@@ -1,9 +1,9 @@
-// 06-手把手带你入门 Three.js Shader 系列（三）
+// 05-手把手带你入门 Three.js Shader 系列（二）
 // 作者：古柳 / 微信：xiaoaizhj 备注「可视化加群」欢迎进群交流
-// 文章：「手把手带你入门 Three.js Shader 系列（三） - 牛衣古柳 - 20230725」
-// 链接：https://mp.weixin.qq.com/s/ifQxPHbWMoLVUTKOKKz_Lw
-// 链接：https://juejin.cn/post/7259411780375314490
-// Codepen：https://codepen.io/GuLiu/pen/yLrraVo
+// 文章：「手把手带你入门 Three.js Shader 系列（二） - 牛衣古柳 - 20230716」
+// 链接：https://mp.weixin.qq.com/s/EstTJxBt3AZAxsgaejJxhg
+// 链接：https://juejin.cn/post/7256039179087380535
+// Codepen：https://codepen.io/GuLiu/pen/oNOOLKa
 
 // 导入threejs
 import * as THREE from 'three';
@@ -38,26 +38,42 @@ const vertexShader = /* GLSL */ `
 
 // 片元着色器***********************
 const fragmentShader = /* GLSL */ `
-    varying vec2 vUv;
-    uniform float uTime;
+  varying vec2 vUv;
 
-    void main() {
-      // 绘制点点-渐变圆形
-    //   float dist = length(fract(vUv * 5.0) - vec2(0.5));
-    //   // 半径大小随时间周期变化
-    //   float radius = 0.5 * (sin(uTime + vUv.x + vUv.y) * 0.5 + 0.5);
-    //   vec3 color = vec3(step(radius, dist));
-    //   gl_FragColor = vec4(color, 1.0);
+  void main() {
+    // 1. 纯红色
+    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+    
+    // 2. vUv.x => 0.0-1.0 => 左边黑右边红
+    gl_FragColor = vec4(vUv.x, 0.0, 0.0, 1.0);
 
-      // 绘制环装-渐变圆形
-    //   反向
-    //   float dist = fract((length(vUv - vec2(0.5)) /0.707 + uTime * 0.1) * 5.0);
-      float dist = fract((length(vUv - vec2(0.5)) /0.707 - uTime * 0.1) * 5.0);
-      // 半径大小随时间周期变化
-      float radius = 0.5;
-      vec3 color = vec3(step(radius, dist));
-      gl_FragColor = vec4(color, 1.0);
-    }
+    // 3. vUv.y => 0.0-1.0 => 下边黑上边红
+    gl_FragColor = vec4(vUv.y, 0.0, 0.0, 1.0);
+    
+    // 4. 黑白灰
+    gl_FragColor = vec4(vec3(vUv.x), 1.0);
+    gl_FragColor = vec4(vec3(vUv.y), 1.0);
+    
+    // 5. 青红、蓝粉
+    gl_FragColor = vec4(vUv, 0.0, 1.0);
+    gl_FragColor = vec4(vUv, 1.0, 1.0);
+    
+    // 6. 颜色突变
+    // float color = step(0.5, vUv.x);
+    
+    // float color = step(0.3, vUv.x);
+    // float color = step(0.7, vUv.x);
+    
+    // 7. 黑白突变顺序互换
+    // float color = step(0.5, 1.0 - vUv.x);
+    // 两种方式都行
+    // float color = step(vUv.x, 0.5);
+    // gl_FragColor = vec4(vec3(color), 1.0);
+    
+    // // 8. 重复条纹效果
+    gl_FragColor = vec4(vec3(fract(vUv.x * 3.0)), 1.0);
+    gl_FragColor = vec4(vec3(step(0.5, fract(vUv.x * 3.0))), 1.0);
+  }
 `;
 
 // 创建几何体
@@ -95,11 +111,15 @@ controls.enableDamping = true;
 // 设置阻尼系数
 controls.dampingFactor = 0.05;
 
+// let time = 0;
+let clock = new THREE.Clock();
 // 渲染场景
-let time = 0;
 function animate() {
-    time += 0.05;
+    // time += 0.05;
+    // material.uniforms.uTime.value += time;
+    let time = clock.getElapsedTime();
     material.uniforms.uTime.value = time;
+
     renderer.render(scene, camera);
     controls.update()
     requestAnimationFrame(animate);
