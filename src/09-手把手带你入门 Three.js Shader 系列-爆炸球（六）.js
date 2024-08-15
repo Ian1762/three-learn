@@ -1,4 +1,4 @@
-// 10-手把手带你入门 Three.js Shader 系列（七）
+// 09-手把手带你入门 Three.js Shader 系列-爆炸球（六）
 
 // 导入threejs
 import * as THREE from 'three';

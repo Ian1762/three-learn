@@ -1,4 +1,8 @@
-// 10-手把手带你入门 Three.js Shader 系列（七）
+// 07-手把手带你入门 Three.js Shader 系列-mix 线性插值（四）
+// 作者：古柳 / 微信：xiaoaizhj 备注「可视化加群」欢迎进群交流
+// 文章：「手把手带你入门 Three.js Shader 系列（四） - 牛衣古柳 - 20231121」
+// 链接：https://mp.weixin.qq.com/s/BYIB6MoHCChL6M0XdBFkJQ
+// 链接：https://juejin.cn/post/7303797715393183796
 
 // 导入threejs
 import * as THREE from 'three';
@@ -7,8 +11,6 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 // 导入lil.gui
 import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 
-import noise from './utils/noise';
-import random from './utils/random';
 // 创建场景
 const scene = new THREE.Scene();
 scene.background = new THREE.Color("#ccc"); // 设置场景背景颜色
@@ -25,33 +27,11 @@ document.body.appendChild(renderer.domElement);
 const vertexShader = /* GLSL */ `
   uniform float uTime;
   varying vec2 vUv;
-  varying vec3 vNormal;
-
-  ${noise}
-  ${random}
 
   void main() {
     vUv = uv;
-    vec3 newPos = position;
-    // 1、顶点 y 坐标累加 sin 值----形状类似纺锤体
-    // newPos.y += sin(position.y);
-    ///2、借助 sin 函数来将 uTime 变化到0.0到10.0再去改变y的值
-    // newPos.y += sin(position.y * (sin(uTime) + 1.0) * 5.0);
-    // 3、固定下数值，将 uTime 加到后面
-    // newPos.y += sin(position.y * 1.0 + uTime * 2.0);
-    ///4、noise 噪声函数
-    // newPos += cnoise(position);
-    ///5、noise 噪声函数----每个顶点朝自己原本的方向去偏移
-    // newPos += normal * cnoise(position);
-    ///6、random与噪声的区别
-    // newPos += normal * random(position);
-    ///7、noise 改变 position 相邻范围
-    // newPos += normal * cnoise(position * 5.0);
-    ///8、动态调整数值
-    newPos += normal * cnoise(position * (sin(uTime * 0.3) + 1.0) * 4.0);
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(newPos, 1.0);
 
-    vNormal = normal;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
   }
 `;
 
@@ -59,21 +39,28 @@ const vertexShader = /* GLSL */ `
 const fragmentShader = /* GLSL */ `
     varying vec2 vUv;
     uniform float uTime;
-    varying vec3 vNormal;
 
     void main() {
-      gl_FragColor = vec4(vNormal, 1.0);
+      vec3 color1 = vec3(1.0, 1.0, 0.0);
+      vec3 color2 = vec3(0.0, 1.0, 1.0); 
+
+      float mixer1 = vUv.x + vUv.y;
+      mixer1 = clamp(mixer1, 0.0, 1.0);
+      float mixer2 = 2.0 - (vUv.x + vUv.y);
+      mixer2 = clamp(mixer2, 0.0, 1.0);
+      float mixer = mixer1 * mixer2;
+
+      // vec3 color = vec3(mixer);
+      vec3 color = mix(color1, color2, mixer);
+      gl_FragColor = vec4(color, 1.0);
     }
 `;
 
 // 创建几何体
-// const geometry = new THREE.PlaneGeometry(1, 1);
+const geometry = new THREE.PlaneGeometry(1, 1);
 // const geometry = new THREE.BoxGeometry(1, 1, 1);
-// const geometry = new THREE.ConeGeometry(1, 2, 16, 1);
 // const geometry = new THREE.SphereGeometry(1, 32, 16);
-// const geometry = new THREE.SphereGeometry(1, 64, 64);
-// const geometry = new THREE.SphereGeometry(1, 128, 128);
-const geometry = new THREE.SphereGeometry(1, 256, 256);
+// const geometry = new THREE.ConeGeometry(1, 2, 16, 1);
 
 const material = new THREE.ShaderMaterial({
   //可在外部通过 material.uniforms.uTime.value 访问
@@ -83,7 +70,7 @@ const material = new THREE.ShaderMaterial({
   },
   vertexShader,
   fragmentShader,
-  wireframe: true,
+  // wireframe: true,
 });
 
 const mesh = new THREE.Mesh(geometry, material);
@@ -128,9 +115,6 @@ window.addEventListener('resize', function () {
   renderer.setSize(window.innerWidth, window.innerHeight);
 })
 
-// 创建GUI
-const gui = new GUI();
-gui.add(material, 'wireframe').name('线框模式')
 
 
 

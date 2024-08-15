@@ -1,4 +1,4 @@
-// 06-手把手带你入门 Three.js Shader 系列（三）
+// 06-手把手带你入门 Three.js Shader 系列-圆（三）
 // 作者：古柳 / 微信：xiaoaizhj 备注「可视化加群」欢迎进群交流
 // 文章：「手把手带你入门 Three.js Shader 系列（三） - 牛衣古柳 - 20230725」
 // 链接：https://mp.weixin.qq.com/s/ifQxPHbWMoLVUTKOKKz_Lw
