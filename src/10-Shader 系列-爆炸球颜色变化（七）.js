@@ -1,4 +1,4 @@
-// 10-手把手带你入门 Three.js Shader 系列-Pepyaka 复现（七）
+// 10-手把手带你入门 Three.js Shader 系列-爆炸球颜色变化（七）
 
 // 导入threejs
 import * as THREE from 'three';
