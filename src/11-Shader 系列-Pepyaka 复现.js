@@ -1,4 +1,5 @@
-// 10-手把手带你入门 Three.js Shader 系列-Pepyaka 复现（七）
+// 11-手把手带你入门 Three.js Shader 系列-Pepyaka 复现
+// https://mp.weixin.qq.com/s/ott654sdvBjF30aLlEcbIg
 
 // 导入threejs
 import * as THREE from 'three';

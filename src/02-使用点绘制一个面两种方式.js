@@ -22,8 +22,12 @@ const geometry = new THREE.BufferGeometry();
 // 1.使用顶点直接绘制 - 这种方式有6个点，有两个点重复了=============
 // 创建定点数据 定点是有顺序的，逆时针为正面
 // const vertices = new Float32Array([
-//     -1, -1, 0, 1, -1, 0, 1, 1, 0,
-//     1, 1, 0, -1, 1, 0, -1, -1, 0
+//     -1, -1, 0,
+//     1, -1, 0,
+//     1, 1, 0,
+//     1, 1, 0,
+//     -1, 1, 0,
+//     -1, -1, 0
 // ])
 // // 创建顶点属性
 // geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
@@ -32,7 +36,9 @@ const geometry = new THREE.BufferGeometry();
 // 2.使用索引绘 - 这种方式有4个点，有两个点重复使用===========
 // 使用索引绘
 const vertices = new Float32Array([
-    -1, -1, 0, 1, -1, 0, 1, 1, 0,
+    -1, -1, 0,
+    1, -1, 0,
+    1, 1, 0,
     -1, 1, 0
 ])
 // 创建顶点属性
