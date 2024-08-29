@@ -233,7 +233,7 @@ const createText = () => {
     uniforms: {
       uTime: { value: 0 },
       uTexture: {
-        value: new THREE.TextureLoader().load("https://i.postimg.cc/nrSTmrZk/text.png"), // './assets/text.png',
+        value: new THREE.TextureLoader().load("/text.png"), // './assets/text.png','https://i.postimg.cc/nrSTmrZk/text.png',
       },
     },
     transparent: true,

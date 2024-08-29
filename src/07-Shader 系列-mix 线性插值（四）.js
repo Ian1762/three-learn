@@ -36,6 +36,10 @@ const vertexShader = /* GLSL */ `
 `;
 
 // 片元着色器***********************
+/**
+ * mix(x, y, a) 为线性插值，结果为 x*(1-a)+y*a，浮点数 a 的范围是0.0到1.0，根据其数值大小对 x、y 进行插值。当 a=0.0 时，mix 的结果为 x；a=1.0 时，
+ * 结果为 y；a=0.5 时，结果为 (x+y)/2.0 ... 其中 x、y 可以是 float/vec2/vec3/vec4 等数据类型，只要两者类型一致就行，插值后的结果也是同一类型。
+ */
 const fragmentShader = /* GLSL */ `
     varying vec2 vUv;
     uniform float uTime;
