@@ -162,7 +162,7 @@ const fragmentShader = /* GLSL */ `
 
         // 二、通过distance实现************************************
         float dist = distance(gl_PointCoord, vec2(0.5));
-        float mask = smoothstep( 0.499, 0.5,dist);
+        float mask = smoothstep(0.5, 0.499, dist);
         // float mask = step(dist, 0.5);
         // 1. 黑色===============================================
         // vec3 color = vec3(0.0);
