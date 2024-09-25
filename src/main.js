@@ -1,4 +1,4 @@
-// 14-Shader 系列-粒子特效-上
+// 14-Shader 系列-粒子特效-下
 // https://juejin.cn/post/7358704808525971475?searchId=20240808094337E223662DD7C0C43D43C8
 
 // 导入threejs
