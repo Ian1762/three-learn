@@ -1,4 +1,4 @@
-// 16-Shader 系列-平面线凸起效果
+// 15-Shader 系列-旗帜飘扬效果
 // https://juejin.cn/post/7358704808525971475?searchId=20240808094337E223662DD7C0C43D43C8
 
 // 导入threejs
@@ -41,20 +41,21 @@ controls.dampingFactor = 0.05;
 const vertexShader = /* GLSL */ `
   uniform float uTime;
   varying vec2 vUv;
-  varying float vStrength;
 
   const float PI = 3.141592653589793238;
 
   void main() {
     vUv = uv;
 
+    // 平面正弦波动
+    // vec3 newPos = position;
+    // newPos.z += 0.5 * sin(position.x * PI * 2.0+uTime);
+    // gl_Position = projectionMatrix * modelViewMatrix * vec4(newPos, 1.0);
+
+    // 平面旗帜飘扬效果
     vec4 modelPosition = modelMatrix * vec4(position, 1.0);
-    float dist = distance(uv, vec2(0.5));
-    float strength = dist;
-    vStrength = strength;
-    // 凸起效果
-    modelPosition.z += 0.3 * strength;
-    // 视图矩阵计算
+    modelPosition.y += 0.08 * sin(modelPosition.x * PI * 2.0 + uTime);
+    modelPosition.z += 0.1 * sin(modelPosition.x * PI * 1.5 + uTime);
     gl_Position = projectionMatrix * viewMatrix * modelPosition;
   }
 `;
@@ -62,16 +63,10 @@ const vertexShader = /* GLSL */ `
 const fragmentShader = /* GLSL */ `
   uniform sampler2D uTexture;
   varying vec2 vUv;
-  varying float vStrength;
 
   void main() {
-    // 纯色
     // gl_FragColor = vec4(1.0, 0.0, 1.0, 1.0);
-    // 黑白渐变
-    vec3 color = vec3(vStrength);
-    gl_FragColor = vec4(color, 1.0);
-    // 旗帜贴图
-    // gl_FragColor = texture2D(uTexture, vUv);
+    gl_FragColor = texture2D(uTexture, vUv);
   }
 `;
 

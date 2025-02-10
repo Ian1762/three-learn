@@ -49,8 +49,21 @@ const vertexShader = /* GLSL */ `
     vUv = uv;
 
     vec4 modelPosition = modelMatrix * vec4(position, 1.0);
-    float dist = distance(uv, vec2(0.5));
-    float strength = dist;
+    // 斜向变化
+    // float strength = uv.x;
+    // 渐变斜向变化
+    // float strength = smoothstep(0.0, 1.0, uv.x);
+    // float strength = smoothstep(0.2, 0.8, uv.x);
+    // float strength = smoothstep(0.8, 0.2, uv.x);
+    // 凸起效果
+    // float strength = abs(uv.x - 0.5);
+    // 渐变凸起效果
+    // float strength = smoothstep(0.0, 0.5, abs(uv.x - 0.5));
+    // float strength = smoothstep(0.5, 0.0, abs(uv.x - 0.5));
+    // float strength = smoothstep(0.3, 0.0, abs(uv.x - 0.5));
+    // 动画渐变凸起效果
+    float strength = smoothstep(0.3, 0.0, abs(uv.x - 0.5 + 0.5 * sin(uTime)));
+
     vStrength = strength;
     // 凸起效果
     modelPosition.z += 0.3 * strength;
